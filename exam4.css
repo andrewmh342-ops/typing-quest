@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f0f23;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    font-family: 'Press Start 2P', monospace;
+    color: #eaeaea;
+}
+
+.game-box {
+    width: 480px;
+    padding: 24px;
+    text-align: center;
+    background: #1a1a2e;
+    border: 4px solid #eaeaea;
+    box-shadow:
+        0 0 0 4px #0f0f23,
+        0 0 0 8px #4a4e69,
+        8px 8px 0 8px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    font-size: 20px;
+    color: #ffe066;
+    text-shadow: 3px 3px 0 #ff2e63;
+    margin: 0 0 8px;
+    letter-spacing: 2px;
+}
+
+.guide {
+    font-size: 10px;
+    line-height: 1.8;
+    color: #9d9dc7;
+    margin-bottom: 20px;
+}
+
+.stage {
+    background: #0f0f23;
+    border: 3px solid #4a4e69;
+    padding: 24px 0;
+    margin-bottom: 16px;
+}
+
+#targetChar {
+    font-size: 48px;
+    color: #00ff41;
+    text-shadow: 0 0 8px #00ff41;
+    min-height: 60px;
+    transition: transform 0.06s linear;
+}
+
+.stage.flash-correct {
+    border-color: #00ff41;
+    box-shadow: 0 0 12px #00ff41 inset;
+}
+
+.stage.flash-wrong {
+    border-color: #ff2e63;
+    box-shadow: 0 0 12px #ff2e63 inset;
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.panel {
+    flex: 1;
+    background: #16213e;
+    border: 3px solid #4a4e69;
+    padding: 10px 6px;
+}
+
+.panel .label {
+    font-size: 9px;
+    color: #9d9dc7;
+    margin-bottom: 8px;
+}
+
+#score {
+    font-size: 18px;
+    color: #ffe066;
+}
+
+#timer {
+    font-size: 18px;
+    color: #4cc9f0;
+}
+
+#timer.low-time {
+    color: #ff2e63;
+    animation: blink 0.5s step-start infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.3; }
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+button {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    padding: 12px 18px;
+    color: #0f0f23;
+    background: #00ff41;
+    border: none;
+    box-shadow:
+        3px 3px 0 #08702a,
+        -2px 0 0 rgba(0,0,0,0.15) inset;
+    cursor: pointer;
+}
+
+button:active {
+    transform: translate(3px, 3px);
+    box-shadow: none;
+}
+
+#resetButton {
+    background: #ff2e63;
+    box-shadow: 3px 3px 0 #8a0f2f;
+}
+
+#message {
+    margin-top: 16px;
+    min-height: 16px;
+    font-size: 11px;
+    color: #ff2e63;
+}

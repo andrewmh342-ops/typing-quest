@@ -1,0 +1,47 @@
+<!--
+    1. 정답인 경우 시간이 2초 증가, 오답인 경우 시간이 2초 감소
+    2. 점수는 정답인 경우 10점 증가, 오답인 경우 5점 감소인데, 점수가 0점 미만으로 내려가지 않도록 처리
+    3. css, javascript를 분리해보세요.
+    4. 소문자와 대문자를 확실히 구분할 수 있게 처리하고, 전체적인 디자인을 게임처럼 픽셀 아트로 만들어주세요.
+    5. repository를 새로 만들고
+    6. github 페이지에 배포해보세요.
+ -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Quest</title>
+    <link rel="stylesheet" href="exam4.css">
+</head>
+<body>
+    <div class="game-box">
+        <h1>TYPING QUEST</h1>
+        <p class="guide">아래 문자를 입력하세요<br>(소문자 / 대문자 구분)</p>
+
+        <div class="stage" id="stage">
+            <div id="targetChar"></div>
+        </div>
+
+        <div class="status-row">
+            <div class="panel">
+                <div class="label">SCORE</div>
+                <div id="score">점수: 0</div>
+            </div>
+            <div class="panel">
+                <div class="label">TIME</div>
+                <div id="timer">남은 시간: 20</div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button id="startButton" onclick="startGame()">START</button>
+            <button id="resetButton" onclick="resetGame()">RESET</button>
+        </div>
+
+        <div id="message"></div>
+    </div>
+
+    <script src="exam4.js"></script>
+</body>
+</html>
