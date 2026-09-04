@@ -1,147 +1,465 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+
+/* =========================
+   기본 설정
+========================= */
+
 * {
     box-sizing: border-box;
 }
 
+
 body {
     margin: 0;
     min-height: 100vh;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     background: #0f0f23;
+
     background-image:
-        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        linear-gradient(
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+        );
+
     background-size: 24px 24px;
+
     font-family: 'Press Start 2P', monospace;
+
     color: #eaeaea;
 }
 
+
+/* =========================
+   게임 박스
+========================= */
+
 .game-box {
     width: 480px;
+
     padding: 24px;
+
     text-align: center;
+
     background: #1a1a2e;
+
     border: 4px solid #eaeaea;
+
     box-shadow:
         0 0 0 4px #0f0f23,
         0 0 0 8px #4a4e69,
         8px 8px 0 8px rgba(0, 0, 0, 0.5);
 }
 
+
+/* =========================
+   제목
+========================= */
+
 h1 {
     font-size: 20px;
+
     color: #ffe066;
-    text-shadow: 3px 3px 0 #ff2e63;
+
+    text-shadow:
+        3px 3px 0 #ff2e63;
+
     margin: 0 0 8px;
+
     letter-spacing: 2px;
 }
 
+
+/* =========================
+   안내 문구
+========================= */
+
 .guide {
     font-size: 10px;
+
     line-height: 1.8;
+
     color: #9d9dc7;
+
     margin-bottom: 20px;
 }
+
+
+/* =========================
+   게임 스테이지
+========================= */
 
 .stage {
     background: #0f0f23;
+
     border: 3px solid #4a4e69;
+
     padding: 24px 0;
+
     margin-bottom: 16px;
+
+    /*
+        알파벳이 움직일 때
+        영역 밖으로 너무 많이 나가지 않도록 설정
+    */
+    overflow: hidden;
+
+    position: relative;
 }
+
+
+/* =========================
+   타겟 알파벳
+========================= */
 
 #targetChar {
     font-size: 48px;
+
+    /*
+        기본 색상
+    */
     color: #00ff41;
-    text-shadow: 0 0 8px #00ff41;
+
+    text-shadow:
+        0 0 8px #00ff41;
+
     min-height: 60px;
-    transition: transform 0.06s linear;
+
+    /*
+        애니메이션이 적용될 기준점
+    */
+    display: inline-block;
+
+    position: relative;
+
+    /*
+        세 가지 재미 요소를 동시에 적용
+
+        1. moveAlphabet
+           → 좌우로 움직임
+
+        2. changeColor
+           → 색깔 변경
+
+        3. blinkAlphabet
+           → 깜빡임
+    */
+
+    animation:
+        moveAlphabet 1.5s ease-in-out infinite,
+        changeColor 3s linear infinite,
+        blinkAlphabet 1.2s step-start infinite;
 }
+
+
+/* =========================
+   1. 움직이는 알파벳
+========================= */
+
+/*
+    알파벳이 좌우로 움직인다.
+
+    처음
+      ↓
+      A
+
+    중간
+      ↓
+        A
+
+    다시
+      ↓
+      A
+*/
+
+@keyframes moveAlphabet {
+
+    0% {
+        transform: translateX(-18px);
+    }
+
+    50% {
+        transform: translateX(18px);
+    }
+
+    100% {
+        transform: translateX(-18px);
+    }
+}
+
+
+/* =========================
+   2. 색깔이 바뀌는 알파벳
+========================= */
+
+/*
+    여러 색상을 순서대로 변경한다.
+
+    초록
+      ↓
+    파랑
+      ↓
+    노랑
+      ↓
+    분홍
+      ↓
+    다시 초록
+*/
+
+@keyframes changeColor {
+
+    0% {
+        color: #00ff41;
+        text-shadow: 0 0 8px #00ff41;
+    }
+
+    20% {
+        color: #4cc9f0;
+        text-shadow: 0 0 8px #4cc9f0;
+    }
+
+    40% {
+        color: #ffe066;
+        text-shadow: 0 0 8px #ffe066;
+    }
+
+    60% {
+        color: #ff2e63;
+        text-shadow: 0 0 8px #ff2e63;
+    }
+
+    80% {
+        color: #c77dff;
+        text-shadow: 0 0 8px #c77dff;
+    }
+
+    100% {
+        color: #00ff41;
+        text-shadow: 0 0 8px #00ff41;
+    }
+}
+
+
+/* =========================
+   3. 깜빡이는 알파벳
+========================= */
+
+/*
+    알파벳이 나타났다 사라지면서
+    깜빡이는 효과를 만든다.
+*/
+
+@keyframes blinkAlphabet {
+
+    0% {
+        opacity: 1;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 0.15;
+    }
+
+    35% {
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    65% {
+        opacity: 0.15;
+    }
+
+    70% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================
+   정답 효과
+========================= */
 
 .stage.flash-correct {
+
     border-color: #00ff41;
-    box-shadow: 0 0 12px #00ff41 inset;
+
+    box-shadow:
+        0 0 12px #00ff41 inset,
+        0 0 20px #00ff41;
 }
 
+
+/* =========================
+   오답 효과
+========================= */
+
 .stage.flash-wrong {
+
     border-color: #ff2e63;
-    box-shadow: 0 0 12px #ff2e63 inset;
+
+    box-shadow:
+        0 0 12px #ff2e63 inset,
+        0 0 20px #ff2e63;
 }
+
+
+/* =========================
+   점수 / 시간 영역
+========================= */
 
 .status-row {
     display: flex;
+
     justify-content: space-between;
+
     gap: 12px;
+
     margin-bottom: 20px;
 }
 
+
 .panel {
     flex: 1;
+
     background: #16213e;
+
     border: 3px solid #4a4e69;
+
     padding: 10px 6px;
 }
 
+
 .panel .label {
     font-size: 9px;
+
     color: #9d9dc7;
+
     margin-bottom: 8px;
 }
 
+
 #score {
     font-size: 18px;
+
     color: #ffe066;
 }
 
+
 #timer {
     font-size: 18px;
+
     color: #4cc9f0;
 }
 
+
+/* =========================
+   시간이 얼마 안 남았을 때
+========================= */
+
 #timer.low-time {
+
     color: #ff2e63;
-    animation: blink 0.5s step-start infinite;
+
+    animation:
+        blink 0.5s step-start infinite;
 }
 
+
 @keyframes blink {
-    50% { opacity: 0.3; }
+
+    50% {
+        opacity: 0.3;
+    }
 }
+
+
+/* =========================
+   버튼
+========================= */
 
 .buttons {
     display: flex;
+
     gap: 12px;
+
     justify-content: center;
 }
 
+
 button {
     font-family: 'Press Start 2P', monospace;
+
     font-size: 11px;
+
     padding: 12px 18px;
+
     color: #0f0f23;
+
     background: #00ff41;
+
     border: none;
+
     box-shadow:
         3px 3px 0 #08702a,
-        -2px 0 0 rgba(0,0,0,0.15) inset;
+        -2px 0 0 rgba(0, 0, 0, 0.15) inset;
+
     cursor: pointer;
 }
 
+
+/* 버튼을 눌렀을 때 */
+
 button:active {
+
     transform: translate(3px, 3px);
+
     box-shadow: none;
 }
 
+
+/* =========================
+   RESET 버튼
+========================= */
+
 #resetButton {
+
     background: #ff2e63;
-    box-shadow: 3px 3px 0 #8a0f2f;
+
+    box-shadow:
+        3px 3px 0 #8a0f2f;
 }
 
+
+/* =========================
+   메시지
+========================= */
+
 #message {
+
     margin-top: 16px;
+
     min-height: 16px;
+
     font-size: 11px;
+
     color: #ff2e63;
 }
