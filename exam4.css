@@ -51,6 +51,7 @@ h1 {
     border: 3px solid #4a4e69;
     padding: 24px 0;
     margin-bottom: 16px;
+    overflow: hidden;
 }
 
 #targetChar {
@@ -59,6 +60,44 @@ h1 {
     text-shadow: 0 0 8px #00ff41;
     min-height: 60px;
     transition: transform 0.06s linear;
+    display: inline-block;
+}
+
+/* 재미 요소: 문자가 좌우로 움직이며 흔들림 */
+#targetChar.effect-move {
+    animation: charMove 0.9s ease-in-out infinite;
+}
+
+@keyframes charMove {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    20% { transform: translate(10px, -6px) rotate(-6deg); }
+    40% { transform: translate(-12px, 5px) rotate(5deg); }
+    60% { transform: translate(8px, 8px) rotate(4deg); }
+    80% { transform: translate(-8px, -8px) rotate(-4deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* 재미 요소: 문자 색깔이 계속 바뀜 */
+#targetChar.effect-color {
+    animation: charColor 1s linear infinite;
+}
+
+@keyframes charColor {
+    0%   { color: #00ff41; text-shadow: 0 0 10px #00ff41; }
+    25%  { color: #ff2e63; text-shadow: 0 0 10px #ff2e63; }
+    50%  { color: #4cc9f0; text-shadow: 0 0 10px #4cc9f0; }
+    75%  { color: #ffe066; text-shadow: 0 0 10px #ffe066; }
+    100% { color: #00ff41; text-shadow: 0 0 10px #00ff41; }
+}
+
+/* 재미 요소: 문자가 깜빡거림 */
+#targetChar.effect-blink {
+    animation: charBlink 0.4s step-start infinite;
+}
+
+@keyframes charBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.1; }
 }
 
 .stage.flash-correct {

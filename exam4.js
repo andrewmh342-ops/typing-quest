@@ -17,9 +17,27 @@ function getRandomChar() {
     return chars[Math.floor(Math.random() * chars.length)];
 }
 
+// 재미 요소로 문자에 입힐 수 있는 시각 효과 목록 ('' 는 효과 없음)
+const CHAR_EFFECTS = ['', 'effect-move', 'effect-color', 'effect-blink'];
+
+// 타겟 문자에 붙어있는 시각 효과 클래스를 모두 제거하는 함수
+function clearCharEffect() {
+    targetCharElement.classList.remove('effect-move', 'effect-color', 'effect-blink');
+}
+
+// 타겟 문자에 랜덤한 시각 효과(움직임/색변화/깜빡임)를 입히는 함수
+function applyRandomCharEffect() {
+    clearCharEffect();
+    const effect = CHAR_EFFECTS[Math.floor(Math.random() * CHAR_EFFECTS.length)];
+    if (effect) {
+        targetCharElement.classList.add(effect);
+    }
+}
+
 // 새로운 타겟 문자를 설정하는 함수
 function setNewTargetChar() {
     targetCharElement.innerText = getRandomChar();
+    applyRandomCharEffect();
 }
 
 // 정답/오답 시 잠깐 테두리를 반짝여 주는 함수
@@ -79,6 +97,7 @@ function updateTimer() {
 function endGame() {
     clearInterval(gameInterval);
     targetCharElement.innerText = ''; // 타겟 문자 제거
+    clearCharEffect();
     timeLeft = 0;
     updateDisplay();
     messageElement.innerText = `시간 초과! 최종 점수: ${score}`;
@@ -109,6 +128,7 @@ function resetGame() {
     messageElement.innerText = '';
     updateDisplay();
     targetCharElement.innerText = ''; // 타겟 문자 초기화
+    clearCharEffect();
     document.removeEventListener('keydown', checkInput); // 키 입력 이벤트 제거
     isGameRunning = false; // 게임 실행 상태를 종료로 설정
 }
