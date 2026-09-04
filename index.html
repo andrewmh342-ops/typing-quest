@@ -1,47 +1,92 @@
 <!--
-    1. 정답인 경우 시간이 2초 증가, 오답인 경우 시간이 2초 감소
-    2. 점수는 정답인 경우 10점 증가, 오답인 경우 5점 감소인데, 점수가 0점 미만으로 내려가지 않도록 처리
-    3. css, javascript를 분리해보세요.
-    4. 소문자와 대문자를 확실히 구분할 수 있게 처리하고, 전체적인 디자인을 게임처럼 픽셀 아트로 만들어주세요.
-    5. repository를 새로 만들고
-    6. github 페이지에 배포해보세요.
- -->
+    Typing Quest
+
+    기능
+    1. 정답 시 점수 10점 증가, 오답 시 점수 5점 감소 (0점 아래로는 내려가지 않음)
+    2. 오답 시 시간 5초 감소. 정답은 시간을 바로 늘려주지 않고,
+       3번 연속으로 맞혀야 콤보 보너스로 시간이 6초 늘어남
+    3. 대문자 / 소문자 / 숫자를 색깔과 라벨로 확실히 구분
+    4. 문자에 회전 / 크기 변화 / 희미한 깜빡임 효과가 랜덤으로 등장 (점수가 오를수록 더 자주 등장)
+    5. 최근 5번의 최종 점수를 기록해서 보여줌 (localStorage에 저장되어 새로고침해도 유지)
+    6. 콤보 달성 시 "+N SEC" 팝업, 콤보가 끊기면 "COMBO BREAK!" 문구 표시
+-->
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Typing Quest</title>
+
     <link rel="stylesheet" href="exam4.css">
 </head>
-<body>
-    <div class="game-box">
-        <h1>TYPING QUEST</h1>
-        <p class="guide">아래 문자를 입력하세요<br>(소문자 / 대문자 구분)</p>
 
+<body>
+
+    <div class="game-box">
+
+        <h1>TYPING QUEST</h1>
+
+        <p class="guide">
+            아래 문자를 입력하세요<br>
+            대문자·소문자·숫자는 색으로 구분돼요
+        </p>
+
+        <!-- 게임 화면 -->
         <div class="stage" id="stage">
+
+            <!-- 콤보 보너스 / 콤보 브레이크 팝업 -->
+            <div id="popup" class="popup"></div>
+
+            <!-- 타겟 문자: 색깔 + 회전/크기/깜빡임 효과가 랜덤으로 적용됨 -->
             <div id="targetChar"></div>
+
+            <!-- 현재 문자가 대문자/소문자/숫자 중 무엇인지 알려주는 라벨 -->
+            <div id="charType" class="char-type"></div>
+
         </div>
 
+        <!-- 점수 / 콤보 / 시간 -->
         <div class="status-row">
+
             <div class="panel">
                 <div class="label">SCORE</div>
                 <div id="score">점수: 0</div>
             </div>
+
+            <div class="panel" id="comboPanel">
+                <div class="label">COMBO</div>
+                <div id="combo">0 / 3</div>
+            </div>
+
             <div class="panel">
                 <div class="label">TIME</div>
                 <div id="timer">남은 시간: 20</div>
             </div>
+
         </div>
 
+        <!-- 버튼 -->
         <div class="buttons">
+
             <button id="startButton" onclick="startGame()">START</button>
             <button id="resetButton" onclick="resetGame()">RESET</button>
+
         </div>
 
+        <!-- 게임 메시지 -->
         <div id="message"></div>
+
+        <!-- 최근 5번의 점수 기록 -->
+        <div class="history">
+            <div class="label">RECENT SCORES</div>
+            <ol id="historyList"></ol>
+        </div>
+
     </div>
 
     <script src="exam4.js"></script>
+
 </body>
 </html>
