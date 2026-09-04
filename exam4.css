@@ -55,10 +55,42 @@ h1 {
 }
 
 .guide {
-    font-size: 10px;
+    font-size: 9px;
     line-height: 1.8;
     color: #9d9dc7;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+}
+
+/* =========================
+   난이도 선택
+========================= */
+
+.difficulty-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.diff-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 8px 10px;
+    color: #9d9dc7;
+    background: #16213e;
+    border: 2px solid #4a4e69;
+    cursor: pointer;
+}
+
+.diff-btn.active {
+    color: #00ff41;
+    border-color: #00ff41;
+    box-shadow: 0 0 8px rgba(0, 255, 65, 0.5) inset;
+}
+
+.diff-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 /* =========================
@@ -72,6 +104,18 @@ h1 {
     padding: 24px 0 16px;
     margin-bottom: 16px;
     overflow: hidden;
+}
+
+.stage.shake {
+    animation: stageShake 0.3s ease-in-out;
+}
+
+@keyframes stageShake {
+    0%, 100% { transform: translateX(0); }
+    20%      { transform: translateX(-6px); }
+    40%      { transform: translateX(6px); }
+    60%      { transform: translateX(-4px); }
+    80%      { transform: translateX(4px); }
 }
 
 /* =========================
@@ -101,7 +145,31 @@ h1 {
     text-shadow: 0 0 10px #ff2e63;
 }
 
-/* 문자 종류 라벨 (대문자 / 소문자 / 숫자) */
+/* 보너스 / 함정 문자는 더 강한 글로우로 한 번 더 덮어써서 확실히 눈에 띄게 한다 */
+#targetChar.char-bonus {
+    color: #ffe066;
+    text-shadow: 0 0 10px #ffe066, 0 0 26px #ffe066, 0 0 40px #ffe066;
+}
+
+#targetChar.char-trap {
+    color: #ff2e63;
+    text-shadow: 0 0 10px #ff2e63, 0 0 26px #ff2e63, 0 0 40px #ff2e63;
+}
+
+/* 시작 전 READY / 3·2·1 / GO! 카운트다운 */
+#targetChar.countdown-step {
+    color: #00ff41;
+    text-shadow: 0 0 10px #00ff41;
+    animation: charCountdownPulse 0.5s ease-out;
+}
+
+@keyframes charCountdownPulse {
+    0%   { transform: scale(0.6); opacity: 0; }
+    40%  { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* 문자 종류 라벨 (대문자 / 소문자 / 숫자 / 보너스 / 함정) */
 .char-type {
     margin-top: 8px;
     font-size: 9px;
@@ -112,6 +180,8 @@ h1 {
 .char-type.type-upper { color: #ffe066; }
 .char-type.type-lower { color: #4cc9f0; }
 .char-type.type-number { color: #ff2e63; }
+.char-type.label-bonus { color: #ffe066; }
+.char-type.label-trap { color: #ff2e63; }
 
 /* =========================
    재미 요소 1: 빙글빙글 회전
@@ -152,22 +222,41 @@ h1 {
     50%      { opacity: 0.1; }
 }
 
+/* 점수가 높은 구간(EFFECT_TIERS)에서는 효과 재생 속도를 더 빠르게 */
+#targetChar.effect-spin.effect-fast  { animation-duration: 0.5s; }
+#targetChar.effect-scale.effect-fast { animation-duration: 0.4s; }
+#targetChar.effect-faint.effect-fast { animation-duration: 0.18s; }
+
 /* =========================
-   콤보 보너스 / 콤보 브레이크 팝업
+   팝업 (콤보 배너 / 점수 변화)
 ========================= */
 
-.popup {
+.popup,
+.score-popup {
     position: absolute;
-    top: 6px;
     left: 50%;
-    font-size: 11px;
     opacity: 0;
     pointer-events: none;
     text-shadow: 0 0 6px currentColor;
     transform: translate(-50%, 10px);
 }
 
-.popup.show {
+/* 콤보 보너스 / 콤보 브레이크 / 신기록: 스테이지 상단 배너 */
+.popup {
+    top: 6px;
+    font-size: 11px;
+    color: #00ff41;
+}
+
+/* 매 타격 점수 변화: 문자 근처에서 뜨는 데미지 넘버 스타일 */
+.score-popup {
+    top: 46%;
+    font-size: 12px;
+    color: #00ff41;
+}
+
+.popup.show,
+.score-popup.show {
     animation: popupFloat 0.9s ease-out forwards;
 }
 
@@ -226,6 +315,18 @@ h1 {
 #timer { color: #4cc9f0; }
 #combo { color: #9d9dc7; }
 
+.best-score {
+    margin-top: 6px;
+    font-size: 8px;
+    color: #9d9dc7;
+    overflow-wrap: break-word;
+}
+
+.best-score.new-record {
+    color: #ffe066;
+    animation: comboPulse 0.4s ease-out 3;
+}
+
 /* 콤보가 진행 중일 때 강조 */
 #comboPanel.combo-active #combo {
     color: #00ff41;
@@ -259,14 +360,15 @@ h1 {
 
 .buttons {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 button {
     font-family: 'Press Start 2P', monospace;
-    font-size: 11px;
-    padding: 12px 18px;
+    font-size: 10px;
+    padding: 10px 14px;
     color: #0f0f23;
     background: #00ff41;
     border: none;
@@ -288,8 +390,19 @@ button:active {
     box-shadow: 3px 3px 0 #8a0f2f;
 }
 
+#soundButton {
+    background: #4cc9f0;
+    box-shadow: 3px 3px 0 #1f6f8a;
+}
+
+#soundButton.muted {
+    background: #4a4e69;
+    box-shadow: 3px 3px 0 #2a2d40;
+    color: #9d9dc7;
+}
+
 /* =========================
-   메시지
+   메시지 / 랭크
 ========================= */
 
 #message {
@@ -298,6 +411,19 @@ button:active {
     font-size: 11px;
     color: #ff2e63;
 }
+
+.rank-badge {
+    margin-top: 8px;
+    font-size: 18px;
+    min-height: 22px;
+    letter-spacing: 2px;
+}
+
+.rank-badge.rank-S { color: #ffe066; text-shadow: 0 0 10px #ffe066; }
+.rank-badge.rank-A { color: #c77dff; text-shadow: 0 0 10px #c77dff; }
+.rank-badge.rank-B { color: #4cc9f0; text-shadow: 0 0 10px #4cc9f0; }
+.rank-badge.rank-C { color: #00ff41; text-shadow: 0 0 10px #00ff41; }
+.rank-badge.rank-D { color: #ff2e63; text-shadow: 0 0 10px #ff2e63; }
 
 /* =========================
    최근 5번의 점수 기록

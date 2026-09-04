@@ -6,9 +6,13 @@
     2. 오답 시 시간 5초 감소. 정답은 시간을 바로 늘려주지 않고,
        3번 연속으로 맞혀야 콤보 보너스로 시간이 6초 늘어남
     3. 대문자 / 소문자 / 숫자를 색깔과 라벨로 확실히 구분
-    4. 문자에 회전 / 크기 변화 / 희미한 깜빡임 효과가 랜덤으로 등장 (점수가 오를수록 더 자주 등장)
-    5. 최근 5번의 최종 점수를 기록해서 보여줌 (localStorage에 저장되어 새로고침해도 유지)
+    4. 문자에 회전 / 크기 변화 / 희미한 깜빡임 효과가 랜덤으로 등장 (점수가 오를수록 더 자주, 더 빠르게 등장)
+    5. 최근 5번의 최종 점수와 역대 최고 점수(BEST)를 기록해서 보여줌 (localStorage에 저장)
     6. 콤보 달성 시 "+N SEC" 팝업, 콤보가 끊기면 "COMBO BREAK!" 문구 표시
+    7. 정답/오답 효과음, 화면 흔들림, 매 타격마다 뜨는 점수 팝업 (음소거 가능, 외부 음원 파일 없이 Web Audio로 직접 합성)
+    8. 가끔 등장하는 황금 보너스 문자(추가 점수/시간)와 함정 문자(입력하지 말고 SPACE로 해체해야 함)
+    9. 게임 종료 시 점수에 따른 랭크(S/A/B/C/D) 표시, 최고 기록 경신 시 신기록 연출
+    10. 시작 시 "READY 3·2·1 GO!" 카운트다운, EASY/NORMAL/HARD 난이도 선택
 -->
 <!DOCTYPE html>
 <html lang="ko">
@@ -30,19 +34,29 @@
 
         <p class="guide">
             아래 문자를 입력하세요<br>
-            대문자·소문자·숫자는 색으로 구분돼요
+            황금 문자는 보너스, 붉은 문자는 SPACE로 피하세요!
         </p>
+
+        <!-- 난이도 선택 -->
+        <div class="difficulty-row">
+            <button class="diff-btn" data-difficulty="easy" onclick="selectDifficulty('easy')">EASY</button>
+            <button class="diff-btn active" data-difficulty="normal" onclick="selectDifficulty('normal')">NORMAL</button>
+            <button class="diff-btn" data-difficulty="hard" onclick="selectDifficulty('hard')">HARD</button>
+        </div>
 
         <!-- 게임 화면 -->
         <div class="stage" id="stage">
 
-            <!-- 콤보 보너스 / 콤보 브레이크 팝업 -->
+            <!-- 콤보 보너스 / 콤보 브레이크 / 신기록 팝업 -->
             <div id="popup" class="popup"></div>
 
-            <!-- 타겟 문자: 색깔 + 회전/크기/깜빡임 효과가 랜덤으로 적용됨 -->
+            <!-- 매 타격마다 뜨는 점수 변화 팝업 -->
+            <div id="scorePopup" class="score-popup"></div>
+
+            <!-- 타겟 문자: 색깔 + 회전/크기/깜빡임 효과, 보너스/함정 상태가 랜덤으로 적용됨 -->
             <div id="targetChar"></div>
 
-            <!-- 현재 문자가 대문자/소문자/숫자 중 무엇인지 알려주는 라벨 -->
+            <!-- 현재 문자가 대문자/소문자/숫자/보너스/함정 중 무엇인지 알려주는 라벨 -->
             <div id="charType" class="char-type"></div>
 
         </div>
@@ -53,6 +67,7 @@
             <div class="panel">
                 <div class="label">SCORE</div>
                 <div id="score">점수: 0</div>
+                <div id="bestScore" class="best-score">BEST 0</div>
             </div>
 
             <div class="panel" id="comboPanel">
@@ -72,11 +87,13 @@
 
             <button id="startButton" onclick="startGame()">START</button>
             <button id="resetButton" onclick="resetGame()">RESET</button>
+            <button id="soundButton" onclick="toggleSound()">SOUND: ON</button>
 
         </div>
 
-        <!-- 게임 메시지 -->
+        <!-- 게임 메시지 / 랭크 -->
         <div id="message"></div>
+        <div id="rankBadge" class="rank-badge"></div>
 
         <!-- 최근 5번의 점수 기록 -->
         <div class="history">
